@@ -67,34 +67,6 @@ const calcMachine = Machine(
           }
         }
       },
-      result: {
-        on: {
-          NUMBER: [
-            {
-              cond: "isZero",
-              target: "operand1",
-              actions: ["defaultReadout"]
-            },
-            {
-              cond: "isNotZero",
-              target: "operand1.before_decimal_point",
-              actions: ["setReadoutNum"]
-            }
-          ],
-          PERCENTAGE: {
-            target: "result",
-            actions: ["storeResultAsOperand2", "computePercentage"]
-          },
-          OPERATOR: {
-            target: "operator_entered",
-            actions: ["storeResultAsOperand1", "recordOperator"]
-          },
-          CLEAR: {
-            target: "start",
-            actions: ["defaultReadout"]
-          }
-        }
-      },
       operand1: {
         on: {
           OPERATOR: {
@@ -140,9 +112,60 @@ const calcMachine = Machine(
           }
         }
       },
-      alert: {
+      negative_number: {
         on: {
-          OK: "operand2.hist"
+          NUMBER: [
+            {
+              cond: "isZero",
+              target: "operand1.zero",
+              actions: ["defaultNegativeReadout"]
+            },
+            {
+              cond: "isNotZero",
+              target: "operand1.before_decimal_point",
+              actions: ["setNegativeReadoutNum"]
+            }
+          ],
+          DECIMAL_POINT: {
+            target: "operand1.after_decimal_point",
+            actions: ["defaultNegativeReadout"]
+          },
+          CLEAR: {
+            target: "start",
+            actions: ["defaultReadout"]
+          }
+        }
+      },
+      operator_entered: {
+        on: {
+          OPERATOR: [
+            {
+              cond: "isNotMinus",
+              target: "operator_entered",
+              actions: ["setOperator"]
+            },
+            {
+              cond: "isMinus",
+              target: "negative_number_2",
+              actions: ["startNegativeNumber"]
+            }
+          ],
+          NUMBER: [
+            {
+              target: "operand2.zero",
+              actions: ["defaultReadout"],
+              cond: "isZero"
+            },
+            {
+              cond: "isNotZero",
+              target: "operand2.before_decimal_point",
+              actions: ["setReadoutNum"]
+            }
+          ],
+          DECIMAL_POINT: {
+            target: "operand2.after_decimal_point",
+            actions: ["defaultReadout"]
+          }
         }
       },
       operand2: {
@@ -203,62 +226,6 @@ const calcMachine = Machine(
           }
         }
       },
-      operator_entered: {
-        on: {
-          OPERATOR: [
-            {
-              cond: "isNotMinus",
-              target: "operator_entered",
-              actions: ["setOperator"]
-            },
-            {
-              cond: "isMinus",
-              target: "negative_number_2",
-              actions: ["startNegativeNumber"]
-            }
-          ],
-          NUMBER: [
-            {
-              target: "operand2.zero",
-              actions: ["defaultReadout"],
-              cond: "isZero"
-            },
-            {
-              cond: "isNotZero",
-              target: "operand2.before_decimal_point",
-              actions: ["setReadoutNum"]
-            }
-          ],
-          DECIMAL_POINT: {
-            target: "operand2.after_decimal_point",
-            actions: ["defaultReadout"]
-          }
-        }
-      },
-      negative_number: {
-        on: {
-          NUMBER: [
-            {
-              cond: "isZero",
-              target: "operand1.zero",
-              actions: ["defaultNegativeReadout"]
-            },
-            {
-              cond: "isNotZero",
-              target: "operand1.before_decimal_point",
-              actions: ["setNegativeReadoutNum"]
-            }
-          ],
-          DECIMAL_POINT: {
-            target: "operand1.after_decimal_point",
-            actions: ["defaultNegativeReadout"]
-          },
-          CLEAR: {
-            target: "start",
-            actions: ["defaultReadout"]
-          }
-        }
-      },
       negative_number_2: {
         on: {
           NUMBER: [
@@ -281,6 +248,39 @@ const calcMachine = Machine(
             target: "operator_entered",
             actions: ["defaultReadout"]
           }
+        }
+      },
+      result: {
+        on: {
+          NUMBER: [
+            {
+              cond: "isZero",
+              target: "operand1",
+              actions: ["defaultReadout"]
+            },
+            {
+              cond: "isNotZero",
+              target: "operand1.before_decimal_point",
+              actions: ["setReadoutNum"]
+            }
+          ],
+          PERCENTAGE: {
+            target: "result",
+            actions: ["storeResultAsOperand2", "computePercentage"]
+          },
+          OPERATOR: {
+            target: "operator_entered",
+            actions: ["storeResultAsOperand1", "recordOperator"]
+          },
+          CLEAR: {
+            target: "start",
+            actions: ["defaultReadout"]
+          }
+        }
+      },
+      alert: {
+        on: {
+          OK: "operand2.hist"
         }
       }
     }
