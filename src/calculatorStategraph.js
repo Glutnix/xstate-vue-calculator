@@ -77,7 +77,7 @@ const calcMachine = Machine(
             target: "result",
             actions: ["storeResultAsOperand2", "computePercentage"]
           },
-          CLEAR: {
+          CLEAR_ENTRY: {
             target: "operand1",
             actions: ["defaultReadout"]
           }
@@ -130,7 +130,7 @@ const calcMachine = Machine(
             target: "operand1.after_decimal_point",
             actions: ["defaultNegativeReadout"]
           },
-          CLEAR: {
+          CLEAR_ENTRY: {
             target: "start",
             actions: ["defaultReadout"]
           }
@@ -187,7 +187,7 @@ const calcMachine = Machine(
             },
             { target: "alert", actions: ["divideByZeroAlert"] }
           ],
-          CLEAR: {
+          CLEAR_ENTRY: {
             target: "operand2",
             actions: ["defaultReadout"]
           }
@@ -244,7 +244,7 @@ const calcMachine = Machine(
             target: "operand2.after_decimal_point",
             actions: ["defaultNegativeReadout"]
           },
-          CLEAR: {
+          CLEAR_ENTRY: {
             target: "operator_entered",
             actions: ["defaultReadout"]
           }
@@ -272,7 +272,7 @@ const calcMachine = Machine(
             target: "operator_entered",
             actions: ["storeResultAsOperand1", "recordOperator"]
           },
-          CLEAR: {
+          CLEAR_ENTRY: {
             target: "start",
             actions: ["defaultReadout"]
           }

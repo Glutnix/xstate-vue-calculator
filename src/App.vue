@@ -9,6 +9,7 @@
           @click="handleButtonClick(button)"
           class="calc-button"
           :class="{'two-span': button === 'C'}"
+          :title="buttonDescription(button)"
         >{{ button }}</button>
       </div>
       <div class="state">
@@ -68,23 +69,34 @@ export default {
       } else if (isOperator(item)) {
         send("OPERATOR", { operator: item });
       } else if (item === "C") {
-        send("CLEAR");
+        send("CLEAR_EVERYTHING");
       } else if (item === ".") {
         send("DECIMAL_POINT");
       } else if (item === "%") {
         send("PERCENTAGE");
       } else if (item === "CE") {
-        send("CLEAR_EVERYTHING");
+        send("CLEAR_ENTRY");
       } else {
         send("EQUALS");
       }
+    }
+
+    function buttonDescription(button) {
+      if (Number.isInteger(+button)) return `NUMBER ${button}`;
+      if (isOperator(button)) return `OPERATOR ${button}`;
+      if (button === "C") return "CLEAR_EVERYTHING";
+      if (button === "CE") return "CLEAR_ENTRY";
+      if (button === ".") return "DECIMAL_POINT";
+      if (button === "%") return "PERCENTAGE";
+      if (button === "=") return "EQUALS";
     }
 
     return {
       state,
       send,
       buttons,
-      handleButtonClick
+      handleButtonClick,
+      buttonDescription
     };
   }
 };
